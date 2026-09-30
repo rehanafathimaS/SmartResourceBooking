@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Resource = require('./models/Resource');
+const User = require('./models/User');
+const bcrypt = require('bcryptjs');
 
 dotenv.config();
 
@@ -22,13 +24,28 @@ mongoose.connect(process.env.MONGO_URI)
       { name: 'Main Campus Auditorium', type: 'Auditorium', location: 'Amenities Block', description: 'Capacity 1000, Stage Lighting & AC' }
     ];
 
-    await Resource.deleteMany({}); // Purana data clear panna
+    // Clear old resources and insert new ones
+    await Resource.deleteMany({});
     await Resource.insertMany(defaultResources);
-    
     console.log('✅ Resources added successfully to DB!');
+
+    // Create Default Admin User
+    const hashedPassword = await bcrypt.hash('123', 10);
+    
+    await User.deleteMany({ email: 'testadmin@gmail.com' }); 
+    await User.create({
+      name: 'Test Admin',
+      email: 'testadmin@gmail.com',
+      password: hashedPassword,
+      role: 'admin',
+      department: 'Administration'
+    });
+    
+    console.log('✅ Default Admin user (testadmin@gmail.com) created successfully!');
+
     process.exit();
   })
   .catch(err => {
-    console.error('Error seeding resources:', err);
+    console.error('Error seeding data:', err);
     process.exit(1);
   });

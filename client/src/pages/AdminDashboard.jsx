@@ -21,7 +21,7 @@ function AdminDashboard() {
 
   const fetchAllBookings = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/bookings', {
+      const res = await axios.get('https://smartresourcebooking-1.onrender.com/api/bookings', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(res.data);
@@ -48,7 +48,7 @@ function AdminDashboard() {
 
     if (result.isConfirmed) {
       try {
-        await axios.put(`http://localhost:5000/api/bookings/${id}/approve`, {}, {
+       await axios.put(`https://smartresourcebooking-1.onrender.com/api/bookings/${id}/approve`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
         Swal.fire('Approved!', 'Booking request has been approved.', 'success');
@@ -73,7 +73,7 @@ function AdminDashboard() {
 
     if (result.isConfirmed) {
       try {
-        await axios.put(`http://localhost:5000/api/bookings/${id}/reject`, { reason }, {
+          await axios.put(`https://smartresourcebooking-1.onrender.com/api/bookings/${id}/reject`, { reason }, {
           headers: { Authorization: `Bearer ${token}` }
         });
         Swal.fire('Rejected!', 'Booking request has been rejected.', 'success');

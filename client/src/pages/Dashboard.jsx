@@ -37,9 +37,9 @@ function Dashboard() {
     }
   }, [selectedResource, date]);
 
-  const fetchResources = async () => {
+ const fetchResources = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/resources');
+      const res = await axios.get('https://smartresourcebooking-1.onrender.com/api/resources');
       setResources(res.data);
     } catch (err) {
       console.error('Failed to fetch resources:', err);
@@ -48,7 +48,7 @@ function Dashboard() {
 
   const fetchMyBookings = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/bookings/my-bookings', {
+      const res = await axios.get('https://smartresourcebooking-1.onrender.com/api/bookings/my-bookings', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMyBookings(res.data);
@@ -59,7 +59,7 @@ function Dashboard() {
 
   const fetchSlotStatus = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/bookings/slots-status?resourceId=${selectedResource}&date=${date}`, {
+      const res = await axios.get(`https://smartresourcebooking-1.onrender.com/api/bookings/slots-status?resourceId=${selectedResource}&date=${date}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSlotsStatus(res.data);

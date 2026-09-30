@@ -67,8 +67,7 @@ function Dashboard() {
       console.error('Failed to fetch slots:', err);
     }
   };
-
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Determine final purpose text
@@ -80,7 +79,7 @@ function Dashboard() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/bookings', {
+      await axios.post('https://smartresourcebooking-1.onrender.com/api/bookings', {
         resourceId: selectedResource,
         date,
         startPeriod: Number(startPeriod),
@@ -112,7 +111,7 @@ function Dashboard() {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/api/bookings/${id}`, {
+        await axios.delete(`https://smartresourcebooking-1.onrender.com/api/bookings/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         Swal.fire('Cancelled', 'Booking request has been removed.', 'success');
@@ -123,7 +122,6 @@ function Dashboard() {
       }
     }
   };
-
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');

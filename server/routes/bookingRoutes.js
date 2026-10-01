@@ -25,17 +25,20 @@ router.post('/', authMiddleware, async (req, res) => {
 
     await newBooking.save();
 
-    // Populate user and resource details to get real email and facility name
+    // Populate user and resource details safely
     const populatedBooking = await Booking.findById(newBooking._id)
       .populate('userId', 'name email department')
       .populate('resourceId', 'name location');
 
     // EMAIL 1: Send Notification to ADMIN when student submits a request
     try {
-      // Updated Code:
-      const adminEmail = 'rehanashaj4@gmail.com'; // Your real Admin Email ID
-      const mailSubject = `New Booking Request from ${populatedBooking.userId.name}`;
-      const mailText = `Hello Admin,\n\nA new booking request has been submitted:\n\nStudent: ${populatedBooking.userId.name} (${populatedBooking.userId.email})\nResource: ${populatedBooking.resourceId ? populatedBooking.resourceId.name : 'Facility'}\nDate: ${date}\nPeriods: ${startPeriod} to ${endPeriod}\nPurpose: ${purpose}\n\nPlease log in to Admin Dashboard to Accept or Reject.\n\nRegards,\nSmart Resource Portal`;
+      const adminEmail = 'rehanashaj4@gmail.com'; // Your Admin Email ID
+      const studentName = populatedBooking?.userId?.name || 'Student';
+      const studentEmail = populatedBooking?.userId?.email || 'N/A';
+      const resourceName = populatedBooking?.resourceId?.name || 'Facility';
+
+      const mailSubject = `New Booking Request from ${studentName}`;
+      const mailText = `Hello Admin,\n\nA new booking request has been submitted:\n\nStudent: ${studentName} (${studentEmail})\nResource: ${resourceName}\nDate: ${date}\nPeriods: ${startPeriod} to ${endPeriod}\nPurpose: ${purpose}\n\nPlease log in to Admin Dashboard to Accept or Reject.\n\nRegards,\nSmart Resource Portal`;
 
       await sendEmail(adminEmail, mailSubject, mailText);
       console.log('Admin notification email sent successfully!');
